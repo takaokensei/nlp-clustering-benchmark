@@ -1,0 +1,386 @@
+\documentclass[12pt,a4paper,twoside]{article}
+
+%----------------------------------------------------------------------------------------
+% ENCODING AND LANGUAGE
+%----------------------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage[tracking=true]{microtype}
+
+%----------------------------------------------------------------------------------------
+% FONTS
+%----------------------------------------------------------------------------------------
+% Serif (Body): Cormorant Garamond (fallback to EB Garamond)
+\IfFileExists{CormorantGaramond.sty}
+    {\usepackage{CormorantGaramond}}
+    {\usepackage{ebgaramond}}
+
+% Sans-Serif (Headings): Lato
+\usepackage[defaultsans]{lato}
+
+% Monospace (Code): Fira Mono
+\usepackage{FiraMono}
+
+%----------------------------------------------------------------------------------------
+% MATHEMATICS
+%----------------------------------------------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{amssymb}
+\usepackage{siunitx}
+
+%----------------------------------------------------------------------------------------
+% LAYOUT AND GEOMETRY
+%----------------------------------------------------------------------------------------
+\usepackage[a4paper,
+    left=3cm, right=2cm,
+    top=3cm, bottom=2cm,
+    headheight=22pt, headsep=20pt,
+    footskip=40pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{setspace}
+\usepackage{lipsum} 
+
+%----------------------------------------------------------------------------------------
+% GRAPHICS AND FIGURES
+%----------------------------------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shadows, circuits.ee.IEC, calc}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{eso-pic}
+\usepackage[outline]{contour}
+\usepackage[object=vectorian]{pgfornament} 
+
+%----------------------------------------------------------------------------------------
+% TABLES & LISTS
+%----------------------------------------------------------------------------------------
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{lettrine}
+
+%----------------------------------------------------------------------------------------
+% CODE LISTINGS
+%----------------------------------------------------------------------------------------
+\usepackage{listings}
+\lstset{
+    basicstyle=\ttfamily\small\color{secondary},
+    keywordstyle=\color{primary}\bfseries,
+    stringstyle=\color{accent},
+    commentstyle=\color{gray}\itshape,
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{lightgray},
+    rulecolor=\color{primary},
+    captionpos=b,
+    abovecaptionskip=10pt,
+    literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {ç}{{\c{c}}}1 {ó}{{\'o}}1 {õ}{{\~o}}1 {í}{{\'i}}1 {ú}{{\'u}}1 {Á}{{\'A}}1 {Ã}{{\~A}}1 {É}{{\'E}}1 {Ç}{{\c{C}}}1 {Ó}{{\'O}}1 {Õ}{{\~O}}1 {Í}{{\'I}}1 {Ú}{{\'U}}1
+}
+
+%----------------------------------------------------------------------------------------
+% SPECIAL BOXES AND ENVIRONMENTS
+%----------------------------------------------------------------------------------------
+\usepackage{tcolorbox}
+\tcbuselibrary{theorems, skins, breakable}
+
+%----------------------------------------------------------------------------------------
+% REFERENCES AND HYPERLINKS
+%----------------------------------------------------------------------------------------
+\usepackage[hidelinks, pdfencoding=auto, unicode]{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    filecolor=magenta,      
+    urlcolor=engineering,
+    citecolor=accent,
+}
+\usepackage{cleveref}
+
+%----------------------------------------------------------------------------------------
+% COLOR DEFINITIONS
+%----------------------------------------------------------------------------------------
+\definecolor{primary}{HTML}{1e3a8a}      
+\definecolor{secondary}{HTML}{1f2937}    
+\definecolor{accent}{HTML}{dc2626}       
+\definecolor{lightgray}{HTML}{f8fafc}    
+\definecolor{darkgray}{HTML}{374151}     
+\definecolor{engineering}{HTML}{0369a1}  
+\definecolor{lightblue}{HTML}{3b82f6}    
+
+%----------------------------------------------------------------------------------------
+% CUSTOM COMMANDS AND BOXES
+%----------------------------------------------------------------------------------------
+\contourlength{0.04em}
+
+\newcommand*\splitdot{%
+  \hspace{0.2em}\tikz[baseline=-0.3ex]{
+    \fill[accent] (0,0) arc (0:180:0.25ex) -- cycle;
+    \fill[lightblue] (0,0) arc (0:-180:0.25ex) -- cycle;
+  }\hspace{0.2em}%
+}
+
+\newtcolorbox{futuristicbox}[1][]{
+  enhanced, colback=secondary, colframe=primary!70, boxrule=0pt, arc=0pt,
+  borderline west={1pt}{0pt}{primary!80},
+  borderline east={1pt}{0pt}{accent!80},
+  fontupper=\bfseries\color{white},
+  halign=center, valign=center, boxsep=10pt, #1
+}
+
+\newtcolorbox{highlightbox}[1][]{ 
+    enhanced, colback=lightgray, colframe=primary, boxrule=1pt, arc=5pt, 
+    drop shadow={opacity=0.4, shadow xshift=2pt, shadow yshift=-2pt, fill=darkgray!80}, 
+    breakable, coltitle=white, fonttitle=\bfseries\small\sffamily, colbacktitle=primary, 
+    attach boxed title to top left={xshift=12pt, yshift=-5pt}, 
+    boxed title style={arc=3pt, boxrule=0.5pt, drop shadow={opacity=0.4, shadow xshift=1pt, shadow yshift=-1pt, fill=darkgray}}, 
+    left=10pt, right=10pt, top=12pt, bottom=8pt, #1 
+}
+
+\newcommand{\sectiondivider}{
+    \begin{center}
+        \begin{tikzpicture}
+            \draw[primary!50, line width=1pt] (0,0) -- (5,0);
+            \fill[accent] (2.5,0) circle (2pt);
+        \end{tikzpicture}
+    \end{center}
+}
+
+\newcommand{\PageBorder}{%
+\AddToShipoutPictureBG*{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \draw[secondary, line width=0.4pt] ([xshift=1.5cm,yshift=-1.5cm]current page.north west) rectangle ([xshift=-1.5cm,yshift=1.5cm]current page.south east);
+    \draw[primary!80, line width=0.8pt] ([xshift=1.6cm,yshift=-1.6cm]current page.north west) rectangle ([xshift=-1.6cm,yshift=1.6cm]current page.south east);
+  \end{tikzpicture}}%
+}
+\newcommand{\NoPageBorder}{\ClearShipoutPictureBG}
+\newcommand{\RestorePageBorder}{\PageBorder}
+
+\titleformat{\section}{\Large\bfseries\sffamily\color{primary}}{\thesection}{1em}{}[\vspace{-0.5em}\textcolor{accent}{\titlerule[0.8pt]}]
+\titleformat{\subsection}{\large\bfseries\sffamily\color{secondary}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\sffamily\color{darkgray}}{\thesubsubsection}{1em}{}
+
+\setstretch{1.15} 
+\setlength{\parindent}{1.2em} 
+\setlength{\parskip}{0.5em}
+
+%----------------------------------------------------------------------------------------
+% METADATA
+%----------------------------------------------------------------------------------------
+\newcommand{\tituloTrabalho}{Benchmark de Clustering em NLP}
+\newcommand{\subtituloTrabalho}{Avaliação de Embeddings e Algoritmos de Agrupamento}
+\newcommand{\nomeAutor}{Cauã Vitor Figueredo Silva}
+\newcommand{\matriculaAutor}{20220014216}
+\newcommand{\emailAutor}{cauavitorfigueredo@gmail.com}
+\newcommand{\cursoInstituicao}{Engenharia Elétrica – UFRN}
+\newcommand{\disciplina}{Inteligência Artificial}
+
+% Header & Footer
+\pagestyle{fancy} 
+\fancyhf{}
+\fancyhead[LE,RO]{\small\color{primary}\textbf{\thepage}}
+\fancyhead[RE]{\small\color{secondary}\textit{\nomeAutor}}
+\fancyhead[LO]{\small\color{secondary}\textit{\tituloTrabalho}}
+\fancyfoot[C]{\small\color{darkgray}\cursoInstituicao \ | 2025}
+\renewcommand{\headrulewidth}{0.5pt} 
+\renewcommand{\footrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{primary}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{primary}\leaders\hrule height \footrulewidth\hfill}}
+
+%========================================================================================
+% DOCUMENT START
+%========================================================================================
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+% COVER PAGE
+%----------------------------------------------------------------------------------------
+\NoPageBorder
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+    \fill[secondary] (current page.north west) rectangle (current page.south east);
+    \begin{scope}[opacity=0.1]
+        \foreach \i in {1,...,20} {
+            \pgfmathsetmacro{\x}{rand*10 + 10}
+            \pgfmathsetmacro{\y}{rand*15}
+            \fill[primary] (\x,\y) circle (0.15);
+            \foreach \j in {1,...,3} {
+                 \pgfmathsetmacro{\dx}{rand*3}
+                 \pgfmathsetmacro{\dy}{rand*3}
+                 \draw[lightblue, thin] (\x,\y) -- (\x+\dx, \y+\dy);
+            }
+        }
+    \end{scope}
+    \fill[primary] (current page.north west) -- ($(current page.north west) + (0,-1cm)$) -- ($(current page.north east) + (-10cm,-2.5cm)$) -- (current page.north east) -- cycle;
+    \fill[accent] (current page.south west) -- ($(current page.south west) + (12cm, 2cm)$) -- ($(current page.south east) + (0, 1cm)$) -- (current page.south east) -- cycle;
+\end{tikzpicture}
+
+\begin{center}
+    \vspace*{3cm}
+    \vfill
+    {\color{white}\large\bfseries\sffamily\textls[150]{\MakeUppercase{Universidade Federal do Rio Grande do Norte}}}\\[0.2cm]
+    {\color{lightblue}\bfseries\sffamily\textls[100]{CENTRO DE TECNOLOGIA \splitdot DEPARTAMENTO DE ENGENHARIA ELÉTRICA}}\\[1.5cm]
+    \renewcommand{\LettrineFontHook}{\color{accent}\bfseries}
+    {\color{white}\fontsize{28}{32}\selectfont\bfseries\sffamily
+    \tituloTrabalho
+    }
+    \vspace{0.5cm}
+    \begin{futuristicbox}
+    \sffamily\textls[100]{\MakeUppercase{\subtituloTrabalho}}
+    \end{futuristicbox}
+    \vfill
+    {\color{white}\Large\bfseries\sffamily\textls[100]{\MakeUppercase{\nomeAutor}}}\\[0.3cm]
+    {\color{white}\sffamily Matrícula: \texttt{\matriculaAutor} \splitdot \texttt{\emailAutor}}
+    \vfill
+    {\color{white}\large\bfseries\sffamily\textls[100]{NATAL - RN} \splitdot \textls[100]{\MakeUppercase{\today}}}
+    \vspace{2cm}
+\end{center}
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+% EXECUTIVE SUMMARY (RESUMO)
+%----------------------------------------------------------------------------------------
+\RestorePageBorder
+\thispagestyle{plain}
+\begin{center}
+    {\Large\bfseries\color{primary}Resumo}
+\end{center}
+
+\lettrine[lines=3, lhang=0.1, loversize=0.2]{\color{accent}\textbf{E}}{ste trabalho} apresenta um estudo comparativo abrangente sobre a eficácia de diferentes modelos de embeddings e algoritmos de clustering aplicados a textos curtos em português (PT-6) e notícias em inglês (20 Newsgroups). O objetivo central foi identificar a melhor combinação técnica para agrupamento não supervisionado. Utilizou-se modelos de Transformer modernos (Sentence-BERT, GTE, BGE) e métodos clássicos (TF-IDF), avaliados por métricas externas (ARI, NMI, Pureza) e internas (Silhouette). Implementou-se um pipeline otimizado com redução de dimensionalidade (PCA) e paralelismo para viabilizar algoritmos densos como Spectral Clustering. Os resultados apontam que o modelo BGE (BAAI) combinado com K-Means ou GMM, reduzido a 100 dimensões, atinge desempenho de estado da arte (ARI > 0.94) no dataset de textos curtos, superando significativamente abordagens tradicionais.
+
+\vspace{0.5cm}
+\begin{center}
+\begin{tikzpicture}
+    \node[draw=primary, fill=lightgray, rounded corners=5pt, inner sep=8pt,
+          drop shadow={opacity=0.4, shadow xshift=2pt, shadow yshift=-2pt, fill=darkgray!80}] {
+    \begin{minipage}{0.8\textwidth}
+        \centering
+        \textbf{Palavras-chave:} NLP $\cdot$ Clustering $\cdot$ Embeddings $\cdot$ Transformers $\cdot$ Benchmark
+    \end{minipage}
+    };
+\end{tikzpicture}
+\end{center}
+\newpage
+
+%----------------------------------------------------------------------------------------
+% MAIN CONTENT
+%----------------------------------------------------------------------------------------
+\pagestyle{fancy}
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ----------------------------------------------------------------------------
+\section{Introdução}
+O agrupamento de textos (text clustering) é uma tarefa fundamental em processamento de linguagem natural (NLP), permitindo a organização não supervisionada de grandes volumes de documentos.
+
+\subsection{Contextualização e Problema}
+Algoritmos de clustering clássicos enfrentam dificuldades com a alta dimensionalidade e esparsidade típicas de dados textuais. Modelos de linguagem baseados em Transformers (como BERT) mitigam isso gerando representações densas (embeddings), mas sua alta dimensionalidade (768+) introduz desafios computacionais ("Maldição da Dimensionalidade").
+
+\subsection{Objetivos}
+\begin{highlightbox}[title={Objetivo Geral}]
+Avaliar e comparar a performance de diferentes embeddings (TF-IDF vs. Transformers) combinados com múltiplos algoritmos de clustering em datasets de características distintas.
+\end{highlightbox}
+
+Os objetivos específicos incluem:
+\begin{itemize}
+    \item Implementar pipeline robusto de pré-processamento, embedding e clustering.
+    \item Otimizar a execução de algoritmos complexos (Spectral, DBSCAN) via PCA.
+    \item Comparar métricas de qualidade (ARI, NMI, Silhouette).
+\end{itemize}
+
+\sectiondivider
+
+% ----------------------------------------------------------------------------
+\section{Metodologia}
+
+\subsection{Datasets}
+\begin{itemize}
+    \item \textbf{20 Newsgroups (20NG-6):} Subconjunto de 6 classes (comp, rec, sci, etc.), $\sim$6000 documentos. Textos longos, vocabulário técnico.
+    \item \textbf{PT-6 (Textos Curtos):} Dataset sintético/coletado com 6 classes em português. Textos curtos, desafiador pela pouca informação semântica.
+\end{itemize}
+
+\subsection{Modelos de Embedding}
+Foram avaliados quatro métodos:
+\begin{enumerate}
+    \item \textbf{TF-IDF + SVD (Baseline):} Estatístico, baseado em frequência de termos.
+    \item \textbf{Sentence-BERT (SBERT):} Modelo siamês clássico (`paraphrase-multilingual`).
+    \item \textbf{GTE-Base:} General Text Embedding, otimizado para recuperação.
+    \item \textbf{BGE-M3:} Modelo da BAAI, estado da arte em representação densa multilingue.
+\end{enumerate}
+
+\subsection{Algoritmos e Otimização}
+Algoritmos utilizados: \textbf{K-Means, GMM, Agglomerative, DBSCAN, Spectral, HDBSCAN}.
+
+\begin{highlightbox}[title={Otimização Crítica}]
+Para viabilizar o \textit{Spectral Clustering} e \textit{DBSCAN} em vetores densos, aplicou-se \textbf{PCA (Principal Component Analysis)}, reduzindo a dimensionalidade de 768/1024 para 100 componentes, preservando $>$95\% da variância explicada. O Spectral Clustering foi configurado para usar \texttt{affinity='nearest\_neighbors'} (grafo esparso) ao invés de RBF.
+\end{highlightbox}
+
+\sectiondivider
+
+% ----------------------------------------------------------------------------
+\section{Resultados e Discussão}
+
+Os experimentos foram rodados em todas as 48 combinações possíveis (2 datasets $\times$ 4 embeddings $\times$ 6 algoritmos).
+
+\subsection{Análise Quantitativa}
+A Tabela \ref{tab:resumo_pt6} apresenta os melhores resultados obtidos para o dataset PT-6.
+
+\begin{table}[H]
+\centering
+\caption{Melhores Resultados no Dataset PT-6}
+\label{tab:resumo_pt6}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Embedding} & \textbf{Algoritmo} & \textbf{ARI} & \textbf{NMI} \\ \midrule
+BGE-M3 & K-Means & \textbf{0.941} & \textbf{0.935} \\
+BGE-M3 & GMM & 0.940 & 0.934 \\
+SBERT & Spectral & 0.816 & 0.847 \\
+TF-IDF & K-Means & 0.450 & 0.500 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Visualização dos Clusters}
+A Figura \ref{fig:cluster_vis} demonstra a projeção UMAP dos clusters gerados pelo melhor modelo no dataset PT-6.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../results/figures/compare_pt6_bge_umap.png}
+    \caption{Comparação: Classes Reais (Esq) vs. Clusters BGE + K-Means (Dir).}
+    \label{fig:cluster_vis}
+\end{figure}
+
+Observa-se na Figura \ref{fig:cluster_vis} que o BGE agrupou os dados quase perfeitamente (ARI 0.94), com separação nítida visualmente, validando as métricas quantitativas.
+
+\sectiondivider
+
+% ----------------------------------------------------------------------------
+\section{Conclusão}
+Este trabalho demonstrou que o uso de embeddings densos modernos (especialmente BGE-M3) combinado com redução de dimensionalidade (PCA) supera largamente abordagens tradicionais baseadas em frequência (TF-IDF). A otimização implementada permitiu executar algoritmos computacionalmente custosos em tempo hábil. O pipeline desenvolvido é robusto e pode ser aplicado a outros domínios de NLP.
+
+\begin{thebibliography}{9}
+\bibitem{reimers2019} Reimers, N., \& Gurevych, I. (2019). Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks. EMNLP.
+\bibitem{xiao2023} Xiao, S. et al. (2023). C-Pack: Packaged Resources To Advance General Chinese Embedding. BAAI.
+\end{thebibliography}
+
+\end{document}
