@@ -26,6 +26,8 @@ for dir_path in [RAW_DATA_DIR, EMBEDDINGS_DIR, FIGURES_DIR, TABLES_DIR]:
 # ============================================================================
 RANDOM_STATE = 42
 N_INIT_KMEANS = 10  # Número de inicializações para K-Means
+PCA_N_COMPONENTS = 100  # Número de componentes para redução de dimensionalidade
+TIMEOUT_SECONDS = 300  # Tempo máximo por algoritmo (5 minutos)
 
 # ============================================================================
 # EMBEDDINGS - Modelos e Parâmetros
@@ -85,17 +87,20 @@ CLUSTERING_CONFIGS = {
         "eps": 0.5,
         "min_samples": 5,
         "metric": "euclidean",
+        "n_jobs": -1,
     },
     "spectral": {
         "n_clusters": N_CLUSTERS,
         "random_state": RANDOM_STATE,
-        "affinity": "rbf",
-        "gamma": 1.0,
+        "affinity": "nearest_neighbors",
+        "n_neighbors": 10,
+        "n_jobs": -1,
     },
     "hdbscan": {
         "min_cluster_size": 10,
         "min_samples": 5,
         "metric": "euclidean",
+        "core_dist_n_jobs": -1,
     },
 }
 

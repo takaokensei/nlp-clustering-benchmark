@@ -11,6 +11,7 @@ from sklearn.metrics import (
     silhouette_score,
     confusion_matrix,
 )
+from sklearn.decomposition import PCA
 from typing import Dict, Tuple, Optional, List
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -50,6 +51,27 @@ def compute_purity(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     # Pureza total = soma das purezas de cada cluster / total de elementos
     purity = np.sum(cluster_purities) / np.sum(confusion_mat)
     return float(purity)
+
+
+def apply_pca(X: np.ndarray, n_components: int = 100, random_state: int = 42) -> np.ndarray:
+    """
+    Aplica PCA para redução de dimensionalidade.
+    
+    Args:
+        X: Matriz de features original
+        n_components: Número de componentes para manter
+        random_state: Seed aleatória
+        
+    Returns:
+        Matriz reduzida
+    """
+    # Se já tiver menos dimensões que o alvo, retorna original
+    if X.shape[1] <= n_components:
+        return X
+        
+    print(f"      📉 Reduzindo dimensionalidade (PCA): {X.shape[1]} -> {n_components}")
+    pca = PCA(n_components=n_components, random_state=random_state)
+    return pca.fit_transform(X)
 
 
 def compute_all_metrics(
@@ -329,3 +351,34 @@ def save_results_table(
     print(f"Tabela salva em: {filepath}")
     return filepath
 
+
+
+
+def append_result_to_csv(result: Dict, filepath: Path) -> None:
+    """
+    Adiciona uma única linha de resultado ao arquivo CSV (Checkpoint).
+    Cria o arquivo com cabeçalho se não existir.
+    """
+    df = pd.DataFrame([result])
+    
+    # Se arquivo não existe, cria com header. Se existe, append sem header.
+    mode = 'w' if not filepath.exists() else 'a'
+    header = not filepath.exists()
+    
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(filepath, mode=mode, header=header, index=False, encoding='utf-8-sig')
+
+
+def load_checkpoint_results(filepath: Path) -> List[Dict]:
+    """
+    Carrega resultados já processados do arquivo de checkpoint.
+    Retorna lista de dicionários para verificar o que já foi feito.
+    """
+    if not filepath.exists():
+        return []
+    
+    try:
+        return pd.read_csv(filepath).to_dict('records')
+    except Exception as e:
+        print(f"⚠️ Erro ao ler checkpoint: {e}")
+        return []
